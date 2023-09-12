@@ -1,0 +1,5 @@
+rootProject.name = 'o3'
+include 'o3-api'
+include 'o3-core'
+include 'o3-common'
+

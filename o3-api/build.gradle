@@ -1,0 +1,39 @@
+ext {
+    set('springCloudVersion', "2021.0.4")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    implementation project(':o3-core')
+    implementation project(':o3-common')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    implementation 'com.google.guava:guava:31.1-jre'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+//    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+//
+//    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'com.google.guava:guava:31.1-jre'
+//    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+//    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+//
+//    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+//    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+//
+    testImplementation 'org.springframework.security:spring-security-test'
+}

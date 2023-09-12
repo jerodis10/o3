@@ -1,0 +1,9 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+    implementation project(':o3-common')
+    implementation "org.hibernate:hibernate-envers"
+
+    runtimeOnly 'com.h2database:h2'
+}
