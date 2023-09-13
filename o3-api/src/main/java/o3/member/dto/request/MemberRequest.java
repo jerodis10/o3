@@ -1,4 +1,4 @@
-package o3.member.dto;
+package o3.member.dto.request;
 
 import lombok.Getter;
 import o3.member.domain.Member;
@@ -14,7 +14,6 @@ public class MemberRequest {
 
     @NotBlank(message = "아이디를 입력해주세요")
 //    @Size(min = 4, max = 12, message = "아이디는 4글자 이상, 12글자 이하로 입력해주세요.")
-//    @JsonProperty("login_id")
     private String loginId;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
@@ -27,8 +26,7 @@ public class MemberRequest {
     @Size(min = 2, max = 6, message = "이름은 2글자 이상, 6글자 이하로 입력해주세요.")
     private String name;
 
-    @NotNull
-    private String role;
+    private String role = "MEMBER";
 
     @NotBlank(message = "주민번호를 입력해주세요")
     @Size(min = 14, max = 14, message = " 주민등록번호는 -을 포함하여 14글자를 입력해주세요.")

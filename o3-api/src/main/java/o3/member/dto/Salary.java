@@ -15,4 +15,7 @@ public class Salary {
 
     @JsonProperty("주민등록번호")
     private String regNo;
+
+    @JsonProperty("총지급액")
+    private String totalPaymentAmount;
 }

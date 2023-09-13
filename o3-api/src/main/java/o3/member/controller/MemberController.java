@@ -1,10 +1,9 @@
 package o3.member.controller;
 
 import lombok.RequiredArgsConstructor;
-import o3.member.dto.LoginRequest;
-import o3.member.dto.MemberRequest;
+import o3.member.dto.request.LoginRequest;
+import o3.member.dto.request.MemberRequest;
 import o3.member.service.MemberService;
-import o3.openfeign.MemberScrapOpenfeign;
 import o3.response.CustomResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberScrapOpenfeign feign;
 
     @PostMapping("/signup")
     public ResponseEntity<?> createMember(@Validated @RequestBody MemberRequest memberRequest) {

@@ -1,7 +1,7 @@
 package o3.openfeign;
 
-import o3.member.dto.TaxScrapRequest;
-import o3.member.dto.TaxScrapResponse;
+import o3.tax.dto.request.TaxScrapRequest;
+import o3.tax.dto.response.TaxScrapResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

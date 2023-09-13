@@ -1,11 +1,8 @@
-package o3.member.repository;
+package o3.tax.repository;
 
-import o3.member.domain.Member;
-import o3.member.domain.Tax;
+import o3.tax.domain.Tax;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
 public interface TaxRepository extends JpaRepository<Tax, Long> {
-
+    Tax findByMemberId(Long memberId);
 }

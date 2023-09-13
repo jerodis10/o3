@@ -16,10 +16,6 @@ import java.util.Optional;
 public class SpringSecurityAuditorAware implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
-        /**
-         * SecurityContext 에서 인증정보를 가져와 주입시킨다.
-         * 현재 코드는 현재 Context 유저가 user 인가 권한이 있으면, 해당 Principal name 을 대입하고, 아니면 Null 을 set 한다.
-         */
         return Optional.ofNullable(SecurityContextHolder.getContext())
             .map(SecurityContext::getAuthentication)
             .map(authentication -> {

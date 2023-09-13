@@ -10,7 +10,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByLoginId(String loginId);
 
-    Member findByNameAndRegNo(String name, String RegNo);
+    Optional<Member> findByNameAndRegNo(String name, String RegNo);
 
     List<Member> findMembersByName(String name);
 }

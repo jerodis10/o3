@@ -21,6 +21,8 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtProvider {
 
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
@@ -101,7 +103,7 @@ public class JwtProvider {
      * Request Header에서 토큰 추출
      */
     public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken)) {
             String[] token = bearerToken.split(" ");
             if(token.length > 1) return token[1];

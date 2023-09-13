@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import o3.entity.BaseEntity;
+import o3.tax.domain.Tax;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -15,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "member")
-//@Table(name = "member", indexes = { @Index(name = "idx_member", columnList = "member_id") })
 public class Member extends BaseEntity {
 
     @Id
@@ -46,11 +46,6 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     List<Tax> taxList = new ArrayList<>();
 
-    public void addTax(Tax tax) {
-        this.taxList.add(tax);
-        tax.updateMember(this);
-    }
-
     @Builder
     public Member(String loginId, String name, String password, String role, String regNo) {
         this.loginId = loginId;
@@ -66,10 +61,10 @@ public class Member extends BaseEntity {
         this.regNo = regNo;
     }
 
-//    public void addRoom(Room room) {
-//        this.rooms.add(room);
-//        room.updateMember(this);
-//    }
+    public void addTax(Tax tax) {
+        this.taxList.add(tax);
+        tax.updateMember(this);
+    }
 
     public void passwordEncode(String encode) {
         this.password = encode;

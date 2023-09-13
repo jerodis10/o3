@@ -21,9 +21,8 @@ import java.util.List;
 public class JwtFilter extends OncePerRequestFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    private final JwtProvider jwtProvider;
-
     private static final List<String> EXCLUDE_URL = Arrays.asList("/", "/index.html", "/js/main.js", "/favicon.ico", "/member");
+    private final JwtProvider jwtProvider;
 
     /**
      * 토큰 인증 정보를 현재 쓰레드의 SecurityContext 에 저장하는 역할 수행
