@@ -21,7 +21,7 @@ spring:
         hibernate:
           envers:
             audit_table_suffix: _history
-            store_data_at_delete: true   # Delete 될 때, 현재 상태를 함께 저장
+            store_data_at_delete: true
             revision_field_name: revision_id
             revision_type_field_name: revision_type
   cloud:
@@ -46,9 +46,9 @@ resilience4j:
   circuitbreaker:
     configs:
       default:
-        waitDurationInOpenState: 50s # HALF_OPEN 상태로 빨리 전환되어 장애가 복구 될 수 있도록 기본값(60s)보다 작게 설정
-        slowCallRateThreshold: 80 # slowCall 발생 시 서버 스레드 점유로 인해 장애가 생길 수 있으므로 기본값(100)보다 조금 작게 설정
-        slowCallDurationThreshold: 25s # 위와 같은 이유로 5초를 slowCall로 판단함. 해당 값은 TimeLimiter의 timeoutDuration보다 작아야 함
+        waitDurationInOpenState: 50s
+        slowCallRateThreshold: 80
+        slowCallDurationThreshold: 25s
         registerHealthIndicator: true
         recordFailurePredicate: com.o3.openfeign.circuit.DefaultExceptionRecordFailurePredicate
     instances:
@@ -57,7 +57,7 @@ resilience4j:
   timelimiter:
     configs:
       default:
-        timeoutDuration: 30s # slowCallDurationThreshold보다는 크게 설정되어야 함
+        timeoutDuration: 30s
         cancelRunningFuture: true
 
 logging:

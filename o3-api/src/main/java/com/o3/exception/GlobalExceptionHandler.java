@@ -1,9 +1,9 @@
 package com.o3.exception;
 
+import com.o3.response.CustomResponse;
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import lombok.extern.slf4j.Slf4j;
-import com.o3.response.CustomResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +17,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(O3Exception.class)
     public CustomResponse<Void> handleStationException(O3Exception e) {
         log.error("handleStationException : {}", e.getMessage());
         return CustomResponse.error(e.getErrorCode(), e.getMessage());
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public CustomResponse<Void> handleIllegalArgumentException(IllegalArgumentException e) {
         log.error("handleIllegalArgumentException : {}", e.getMessage());
         return CustomResponse.error(CommonExceptionStatus.WRONG_ARGUMENT.getCode(), CommonExceptionStatus.WRONG_ARGUMENT.getMessage());
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e,
@@ -40,7 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request) {
         log.warn("handleIllegalArgument : {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(CustomResponse.error(CommonExceptionStatus.INTERNAL_SERVER_ERROR.getCode(), CommonExceptionStatus.INTERNAL_SERVER_ERROR.getMessage()));
+                .body(CustomResponse.error(CommonExceptionStatus.METHOD_ARGUMENT_NOT_VALID.getCode(), CommonExceptionStatus.METHOD_ARGUMENT_NOT_VALID.getMessage()));
     }
 
     @ExceptionHandler(FeignException.class)
@@ -55,7 +52,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return CustomResponse.error(CommonExceptionStatus.INTERNAL_SERVER_ERROR.getCode(), CommonExceptionStatus.INTERNAL_SERVER_ERROR.getMessage());
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception.class)
     public CustomResponse<Void> handleAllException(Exception e) {
         log.warn("handleAllException : {}", e.getMessage());

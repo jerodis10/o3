@@ -1,20 +1,21 @@
 package com.o3.security.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import com.o3.security.common.ApiResponseType;
-import com.o3.security.jwt.JwtFilter;
 import com.o3.security.jwt.JwtProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Objects;
+
+import static com.o3.member.constants.MemberConstants.AUTHORIZATION_HEADER;
+import static com.o3.member.constants.MemberConstants.BEARER_HEADER;
 
 @Component
 @RequiredArgsConstructor
@@ -33,12 +34,10 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
     }
 
     private void responseToken(HttpServletResponse response, String jwtToken) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(ApiResponseType.SUCCESS.getCode());
-        response.setHeader(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwtToken);
-//        response.getWriter().write(Objects.requireNonNull(objectMapper.writeValueAsString(jwtToken)));
+        response.setHeader(AUTHORIZATION_HEADER, BEARER_HEADER + " " + jwtToken);
     }
 
 }

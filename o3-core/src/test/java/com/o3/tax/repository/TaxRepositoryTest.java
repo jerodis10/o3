@@ -1,8 +1,6 @@
 package com.o3.tax.repository;
 
 import com.o3.member.domain.Member;
-import com.o3.member.domain.MemberPossible;
-import com.o3.member.repository.MemberPossibleRepository;
 import com.o3.member.repository.MemberRepository;
 import com.o3.tax.domain.Tax;
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class TaxRepositoryTest {

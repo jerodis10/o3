@@ -1,10 +1,10 @@
 package com.o3.security.config;
 
-import lombok.RequiredArgsConstructor;
 import com.o3.security.jwt.JwtFilter;
 import com.o3.security.jwt.JwtProvider;
 import com.o3.security.sec.AuthenticationProviderImpl;
 import com.o3.security.sec.CustomAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -12,7 +12,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -20,9 +22,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -69,7 +68,6 @@ public class SecurityConfig {
                         .antMatchers("/szs/login", "/szs/signup", "/h2-console").permitAll()
                         .antMatchers("/admin").hasRole("ADMIN")
                         .antMatchers("/my").authenticated())
-//                        .anyRequest().authenticated())
 
                 .formLogin().disable()
                 .build();

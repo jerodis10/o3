@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.function.Function;
 
+import static com.o3.member.constants.MemberConstants.AUTHORIZATION_HEADER;
 import static com.o3.member.constants.MemberConstants.BEARER_HEADER;
-import static com.o3.security.jwt.JwtFilter.AUTHORIZATION_HEADER;
 
 @Slf4j
 @Component
@@ -129,11 +129,6 @@ public class JwtProvider {
         final Claims claims = getClaimsFormToken(token);
         return claimsResolver.apply(claims);
     }
-
-//    public String getLoginId(HttpServletRequest request) {
-//        String jwtToken = resolveToken(request);
-//        return getUserIdFromToken(jwtToken);
-//    }
 
     public String getLoginIdFromToken(String bearerToken) {
         String jwtToken = resolveJwtToken(bearerToken);

@@ -4,12 +4,10 @@ import com.o3.member.domain.MemberPossible;
 import com.o3.security.common.AESUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MemberPossibleRequestTest {
 

@@ -10,7 +10,8 @@ public enum CommonExceptionStatus {
     ALREADY_PERSIST("COMMON_2000", "이미 등록되었습니다."),
     NOT_PERSIST("COMMON_2100", "등록되어있지 않습니다."),
     INTERNAL_SERVER_ERROR("COMMON_3000", "Internal server error"),
-    NOT_FOUND("COMMON_4000", "존재하지 않는 URL 입니다.");
+    NOT_FOUND("COMMON_4000", "존재하지 않는 URL 입니다."),
+    METHOD_ARGUMENT_NOT_VALID("COMMON_5000", "유효하지 않은 매개변수입니다.");
 
     private final String code;
     private final String message;

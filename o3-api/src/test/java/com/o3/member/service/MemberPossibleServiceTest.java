@@ -53,7 +53,6 @@ class MemberPossibleServiceTest {
 
         // then
         assertThatThrownBy(() -> memberPossibleService.createPossibleMember(memberList)).isInstanceOf(O3Exception.class).hasMessage(O3ExceptionStatus.DUPLICATION_MEMBER.getMessage());
-//        assertThatThrownBy(() -> memberPossibleService.createPossibleMember(memberList)).isInstanceOf(O3Exception.class);
     }
 
     @Test

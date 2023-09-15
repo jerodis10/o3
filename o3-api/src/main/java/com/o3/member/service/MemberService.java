@@ -8,15 +8,13 @@ import com.o3.member.dto.response.MemberResponse;
 import com.o3.member.repository.MemberPossibleRepository;
 import com.o3.member.repository.MemberRepository;
 import com.o3.member.util.MemberValidator;
-import lombok.RequiredArgsConstructor;
 import com.o3.security.common.AESUtil;
-import org.springframework.cache.annotation.CachePut;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Service
@@ -27,7 +25,6 @@ public class MemberService {
     private final MemberPossibleRepository memberPossibleRepository;
     private final PasswordEncoder passwordEncoder;
 
-//    @CachePut(value = "member", key = "#member.loginId")
     @Transactional
     public void createMember(Member member) {
         List<MemberPossible> memberList = memberPossibleRepository.findAll();

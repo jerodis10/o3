@@ -1,14 +1,8 @@
 package com.o3.member.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.o3.exception.GlobalExceptionHandler;
-import com.o3.member.constants.MemberConstants;
 import com.o3.member.dto.response.MemberResponse;
 import com.o3.member.service.MemberService;
 import com.o3.security.jwt.JwtProvider;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,12 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static com.o3.security.jwt.JwtFilter.AUTHORIZATION_HEADER;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.o3.member.constants.MemberConstants.AUTHORIZATION_HEADER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -48,13 +39,6 @@ class MemberControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
-//    @BeforeEach
-//    public void setup() {
-//        mockMvc = MockMvcBuilders.standaloneSetup(target)
-//                .setControllerAdvice(new GlobalExceptionHandler())
-//                .build();
-//    }
 
     @Test
     @DisplayName("가입한 회원 정보 조회 - 인증식별값 헤더에 없음")

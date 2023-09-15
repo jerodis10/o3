@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
     private static final List<String> EXCLUDE_URL = Arrays.asList("/", "/index.html", "/js/main.js", "/favicon.ico", "/member");
     private final JwtProvider jwtProvider;
 

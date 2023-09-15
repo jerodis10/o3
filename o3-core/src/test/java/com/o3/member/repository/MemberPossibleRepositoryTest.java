@@ -1,6 +1,5 @@
 package com.o3.member.repository;
 
-import com.o3.member.domain.Member;
 import com.o3.member.domain.MemberPossible;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class MemberPossibleRepositoryTest {

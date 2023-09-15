@@ -9,13 +9,10 @@ import com.o3.tax.domain.Tax;
 import com.o3.tax.dto.request.TaxScrapRequest;
 import com.o3.tax.dto.response.TaxRefundResponse;
 import com.o3.tax.dto.response.TaxScrapResponse;
-import com.o3.tax.util.NumberUtil;
+import com.o3.tax.repository.TaxRepository;
 import com.o3.tax.util.TaxCalculator;
 import com.o3.tax.util.TaxGroup;
 import lombok.RequiredArgsConstructor;
-import com.o3.security.common.AESUtil;
-import com.o3.tax.repository.TaxRepository;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +26,6 @@ public class TaxService {
     private final MemberRepository memberRepository;
     private final MemberScrapClient feign;
 
-//    @CachePut(value = "tax", key = "#loginId")
     @Transactional
     public void scrapTax(String loginId) {
         Member member = memberRepository.findByLoginId(loginId)

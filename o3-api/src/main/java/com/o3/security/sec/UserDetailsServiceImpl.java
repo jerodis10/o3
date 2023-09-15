@@ -1,8 +1,8 @@
 package com.o3.security.sec;
 
-import lombok.RequiredArgsConstructor;
 import com.o3.member.domain.Member;
 import com.o3.member.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

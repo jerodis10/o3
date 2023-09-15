@@ -1,18 +1,22 @@
 package com.o3.tax.dto.response;
 
-import com.o3.security.common.AESUtil;
-import com.o3.tax.domain.Tax;
-import com.o3.tax.util.NumberUtil;
-import lombok.*;
 import com.o3.exception.O3Exception;
 import com.o3.exception.O3ExceptionStatus;
 import com.o3.member.dto.Data;
 import com.o3.member.dto.IncomeDeduction;
 import com.o3.member.dto.JsonList;
 import com.o3.member.dto.Salary;
+import com.o3.security.common.AESUtil;
+import com.o3.tax.domain.Tax;
+import com.o3.tax.util.NumberUtil;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.o3.tax.util.PaymentGroup.*;
@@ -28,13 +32,13 @@ public class TaxScrapResponse {
 
     public String getName() {
         List<Salary> salaryList = getSalaryList(data.getJsonList());
-        if(!salaryList.isEmpty()) return salaryList.get(0).getName();
+        if(!ObjectUtils.isEmpty(salaryList)) return salaryList.get(0).getName();
         return null;
     }
 
     public String getRegNo() {
         List<Salary> salaryList = getSalaryList(data.getJsonList());
-        if(!salaryList.isEmpty()) return AESUtil.encrypt(salaryList.get(0).getRegNo());
+        if(!ObjectUtils.isEmpty(salaryList)) return AESUtil.encrypt(salaryList.get(0).getRegNo());
         return null;
     }
 
@@ -91,7 +95,7 @@ public class TaxScrapResponse {
         if (!ObjectUtils.isEmpty(jsonList) && !jsonList.getSalaryList().isEmpty()) {
             return jsonList.getSalaryList();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     private long sumTotalPaymentAmount(List<Salary> salaryList) {

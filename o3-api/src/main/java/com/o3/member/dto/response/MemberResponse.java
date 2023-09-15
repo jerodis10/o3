@@ -5,14 +5,7 @@ import com.o3.member.domain.Member;
 import com.o3.security.common.AESUtil;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.springframework.util.Base64Utils;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.Arrays;
 
 @Builder
 @Getter

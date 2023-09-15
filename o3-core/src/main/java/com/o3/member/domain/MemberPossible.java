@@ -1,10 +1,10 @@
 package com.o3.member.domain;
 
+import com.o3.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.o3.entity.BaseEntity;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;

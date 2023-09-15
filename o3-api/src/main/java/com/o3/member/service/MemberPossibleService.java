@@ -1,10 +1,10 @@
 package com.o3.member.service;
 
+import com.o3.exception.O3Exception;
+import com.o3.exception.O3ExceptionStatus;
 import com.o3.member.domain.MemberPossible;
 import com.o3.member.repository.MemberPossibleRepository;
 import lombok.RequiredArgsConstructor;
-import com.o3.exception.O3Exception;
-import com.o3.exception.O3ExceptionStatus;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

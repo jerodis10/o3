@@ -1,8 +1,5 @@
 package com.o3.tax.controller;
 
-import com.o3.member.controller.MemberController;
-import com.o3.member.dto.response.MemberResponse;
-import com.o3.member.service.MemberService;
 import com.o3.security.jwt.JwtProvider;
 import com.o3.tax.dto.response.TaxRefundResponse;
 import com.o3.tax.service.TaxService;
@@ -17,13 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.o3.security.jwt.JwtFilter.AUTHORIZATION_HEADER;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.o3.member.constants.MemberConstants.AUTHORIZATION_HEADER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = TaxController.class)

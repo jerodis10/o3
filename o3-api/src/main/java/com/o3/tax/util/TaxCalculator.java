@@ -4,9 +4,7 @@ import com.o3.tax.domain.Tax;
 import lombok.experimental.UtilityClass;
 
 import static com.o3.tax.util.SpecialTaxGroup.*;
-import static com.o3.tax.util.SpecialTaxGroup.DONATION_DEDUCTION_AMOUNT;
 import static com.o3.tax.util.TaxGroup.*;
-import static com.o3.tax.util.TaxGroup.DETERMINED_TAX_AMOUNT;
 
 @UtilityClass
 public class TaxCalculator {

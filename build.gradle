@@ -9,9 +9,7 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath "io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE"
-//		classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10"
 		classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
-//		classpath "org.asciidoctor:asciidoctor-gradle-jvm:3.3.2"
 	}
 }
 
@@ -21,7 +19,7 @@ def javaProjects = [
 		project(':o3-common')
 ]
 
-def queryDslProjects = [
+def JPAProjects = [
 		project(':o3-core'),
 		project(':o3-common')
 ]
@@ -66,462 +64,75 @@ configure(javaProjects) {
 			property "sonar.token", "sqp_c4d8fa2e64d75fd68be4076c7c3cc5a98d16d793"
 			property "sonar.host.url", "http://localhost:9000"
 
-			property "sonar.sources", "src" // 소스 경로
-			property "sonar.language", "java" // 언어
+			property "sonar.sources", "src"
+			property "sonar.language", "java"
 			property "sonar.sourceEncoding", "UTF-8"
-			property "sonar.profile", "Sonar way" // 소나큐브에서 적용할 프로필(분석할 수준 설정)
-			property "sonar.java.binaries", "${buildDir}/classes" // 자바 클래스 파일위치
-			property "sonar.test.inclusions", "**/*Test.java" // 코드 분석에 사용할 테스트 소스
-			property "sonar.exclusions", "**/resources/static/**, **/Q*.class, **/test/**" // 테스트커버리지에서 제외할 파일, 예제에선 정적 js 파일과 queryDSL Q파일 제외
-			property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml" // jacoco 플러그인의 결과파일
+			property "sonar.profile", "Sonar way"
+			property "sonar.java.binaries", "${buildDir}/classes"
+			property "sonar.test.inclusions", "**/*Test.java"
+			property "sonar.exclusions", "**/resources/static/**, **/Q*.class, **/test/**"
+			property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
 		}
 	}
 
 
 	jacoco {
-		toolVersion = '0.8.8'
-//		reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
-//		reportsDir = ${project.reporting.baseDir}/jacoco - 따로 설정해 주지 않을 경우 기본 경로
+		toolVersion = '0.8.7'
 	}
 
 	jacocoTestReport {
 		reports {
-//			html.enabled true // html 만들어 - 로컬에서 쉽게 보기 위함
-//			xml.enabled true // xml 만들어 - 소나큐브 연동 위함
-//			csv.enabled false // csv 안 만들어
-
-		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-		xml.required = true
-		csv.required = false
-
-			// xml.destination file("${buildDir}/jacoco/result.xml") // 여기 저장할 것이라는 뜻.
+			html.required = true
+			xml.required = true
+			csv.required = false
 		}
-		// 코드 커버리지 기준을 만족해야지 build 성공
-		//	finalizedBy 'jacocoTestCoverageVerification'
 	}
-//
+
 	jacocoTestCoverageVerification {
 		violationRules {
 			rule {
-				enabled = true // 이 rule을 적용할 것이다.
-				element = 'CLASS' // class 단위로
+				enabled = true
+				element = 'CLASS'
 
-				// 브랜치 커버리지 최소 50%
 				limit {
 					counter = 'BRANCH'
 					value = 'COVEREDRATIO'
 					minimum = 0.50
 				}
 
-				// 라인 커버리지 최소한 80%
 				limit {
 					counter = 'LINE'
 					value = 'COVEREDRATIO'
 					minimum = 0.80
 				}
 
-				// 빈 줄을 제외한 코드의 라인수 최대 300라인
 				limit {
 					counter = 'LINE'
 					value = 'TOTALCOUNT'
 					maximum = 300
 				}
 
-				// 커버리지 체크를 제외할 클래스들
 				excludes = []
 			}
 		}
 	}
 
-//	task testCoverage(type: Test) {
-//		group 'verification'
-//		description 'Runs the unit tests with coverage'
-//
-//		dependsOn(':test',
-//				':jacocoTestReport',
-//				':jacocoTestCoverageVerification')
-//
-//		tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
-//		tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
-//	}
+	task testCoverage(type: Test) {
+		group 'verification'
+		description 'Runs the unit tests with coverage'
+
+		dependsOn(':test',
+				':jacocoTestReport',
+				':jacocoTestCoverageVerification')
+
+		tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
+		tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
+	}
 }
 
 
-configure(queryDslProjects) {
-//	buildscript {
-//		ext {
-//			queryDslVersion = "5.0.0"
-//		}
-//	}
-//
-//	apply plugin: "com.ewerk.gradle.plugins.querydsl"
-
+configure(JPAProjects) {
 	dependencies {
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//		implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-//
-//		annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 	}
-
-//	def querydslDir = "$buildDir/generated/querydsl"
-//
-//	querydsl {
-//		jpa = true
-//		querydslSourcesDir = querydslDir
-//	}
-//	sourceSets {
-//		main.java.srcDir querydslDir
-//	}
-//	compileQuerydsl{
-//		options.annotationProcessorPath = configurations.querydsl
-//	}
-//	configurations {
-//		compileOnly {
-//			extendsFrom annotationProcessor
-//		}
-//		querydsl.extendsFrom compileClasspath
-//	}
 }
-
-
-
-
-//subprojects {
-//	apply plugin: 'java'
-//	apply plugin: 'org.springframework.boot'
-//	apply plugin: 'io.spring.dependency-management'
-//	apply plugin: 'org.sonarqube'
-//	apply plugin: 'jacoco'
-//
-//	group = 'o3'
-//	version = '0.0.1'
-//	sourceCompatibility = '11'
-//
-//	repositories {
-//		mavenCentral()
-//	}
-//
-//	configurations {
-//		compileOnly {
-//			extendsFrom annotationProcessor
-//		}
-//	}
-//
-//	test {
-//		useJUnitPlatform()
-//		finalizedBy 'jacocoTestReport'
-//	}
-//
-//	sonarqube {
-//		properties {
-//			property "sonar.projectKey", "money"
-//			property "sonar.token", "sqp_c4d8fa2e64d75fd68be4076c7c3cc5a98d16d793"
-//			property "sonar.host.url", "http://localhost:9000"
-//
-//			property "sonar.sources", "src" // 소스 경로
-//			property "sonar.language", "java" // 언어
-//			property "sonar.sourceEncoding", "UTF-8"
-//			property "sonar.profile", "Sonar way" // 소나큐브에서 적용할 프로필(분석할 수준 설정)
-//			property "sonar.java.binaries", "${buildDir}/classes" // 자바 클래스 파일위치
-//			property "sonar.test.inclusions", "**/*Test.java" // 코드 분석에 사용할 테스트 소스
-//			property "sonar.exclusions", "**/resources/static/**, **/Q*.class, **/test/**" // 테스트커버리지에서 제외할 파일, 예제에선 정적 js 파일과 queryDSL Q파일 제외
-//			property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml" // jacoco 플러그인의 결과파일
-//		}
-//	}
-//
-//
-//	jacoco {
-//		toolVersion = '0.8.8'
-////		reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
-////		reportsDir = ${project.reporting.baseDir}/jacoco - 따로 설정해 주지 않을 경우 기본 경로
-//	}
-//
-//	jacocoTestReport {
-//		reports {
-////			html.enabled true // html 만들어 - 로컬에서 쉽게 보기 위함
-////			xml.enabled true // xml 만들어 - 소나큐브 연동 위함
-////			csv.enabled false // csv 안 만들어
-//
-//		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-//		xml.required = true
-//		csv.required = false
-//
-//			// xml.destination file("${buildDir}/jacoco/result.xml") // 여기 저장할 것이라는 뜻.
-//		}
-//		// 코드 커버리지 기준을 만족해야지 build 성공
-//		//	finalizedBy 'jacocoTestCoverageVerification'
-//	}
-////
-//	jacocoTestCoverageVerification {
-//		violationRules {
-//			rule {
-//				enabled = true // 이 rule을 적용할 것이다.
-//				element = 'CLASS' // class 단위로
-//
-//				// 브랜치 커버리지 최소 50%
-//				limit {
-//					counter = 'BRANCH'
-//					value = 'COVEREDRATIO'
-//					minimum = 0.50
-//				}
-//
-//				// 라인 커버리지 최소한 80%
-//				limit {
-//					counter = 'LINE'
-//					value = 'COVEREDRATIO'
-//					minimum = 0.80
-//				}
-//
-//				// 빈 줄을 제외한 코드의 라인수 최대 300라인
-//				limit {
-//					counter = 'LINE'
-//					value = 'TOTALCOUNT'
-//					maximum = 300
-//				}
-//
-//				// 커버리지 체크를 제외할 클래스들
-//				excludes = []
-//			}
-//		}
-//	}
-//
-//	task testCoverage(type: Test) {
-//		group 'verification'
-//		description 'Runs the unit tests with coverage'
-//
-//		dependsOn(':test',
-//				':jacocoTestReport',
-//				':jacocoTestCoverageVerification')
-//
-//		tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
-//		tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
-//	}
-//}
-
-
-//configure(sonarProjects) {
-//	apply plugin: 'org.sonarqube'
-//	apply plugin: 'jacoco'
-//
-//	test {
-//		useJUnitPlatform()
-//		finalizedBy 'jacocoTestReport'
-//	}
-//
-//	sonarqube {
-//		properties {
-//			property "sonar.projectKey", "money"
-//			property "sonar.token", "sqp_c4d8fa2e64d75fd68be4076c7c3cc5a98d16d793"
-//			property "sonar.host.url", "http://localhost:9000"
-//
-//			property "sonar.sources", "src" // 소스 경로
-//			property "sonar.language", "java" // 언어
-//			property "sonar.sourceEncoding", "UTF-8"
-//			property "sonar.profile", "Sonar way" // 소나큐브에서 적용할 프로필(분석할 수준 설정)
-//			property "sonar.java.binaries", "${buildDir}/classes" // 자바 클래스 파일위치
-//			property "sonar.test.inclusions", "**/*Test.java" // 코드 분석에 사용할 테스트 소스
-//			property "sonar.exclusions", "**/resources/static/**, **/Q*.class, **/test/**" // 테스트커버리지에서 제외할 파일, 예제에선 정적 js 파일과 queryDSL Q파일 제외
-//			property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml" // jacoco 플러그인의 결과파일
-//		}
-//	}
-//
-//
-//	jacoco {
-//		toolVersion = '0.8.7'
-////		reportsDir = ${project.reporting.baseDir}/jacoco - 따로 설정해 주지 않을 경우 기본 경로
-//	}
-//
-//	jacocoTestReport {
-//		reports {
-//			html.enabled true // html 만들어 - 로컬에서 쉽게 보기 위함
-//			xml.enabled true // xml 만들어 - 소나큐브 연동 위함
-//			csv.enabled false // csv 안 만들어
-//
-////		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-////		xml.required = true
-////		csv.required = false
-//
-//			// xml.destination file("${buildDir}/jacoco/result.xml") // 여기 저장할 것이라는 뜻.
-//		}
-//		// 코드 커버리지 기준을 만족해야지 build 성공
-////	finalizedBy 'jacocoTestCoverageVerification'
-//	}
-////
-//	jacocoTestCoverageVerification {
-//		violationRules {
-//			rule {
-//				enabled = true // 이 rule을 적용할 것이다.
-//				element = 'CLASS' // class 단위로
-//
-//				// 브랜치 커버리지 최소 50%
-//				limit {
-//					counter = 'BRANCH'
-//					value = 'COVEREDRATIO'
-//					minimum = 0.50
-//				}
-//
-//				// 라인 커버리지 최소한 80%
-//				limit {
-//					counter = 'LINE'
-//					value = 'COVEREDRATIO'
-//					minimum = 0.80
-//				}
-//
-//				// 빈 줄을 제외한 코드의 라인수 최대 300라인
-//				limit {
-//					counter = 'LINE'
-//					value = 'TOTALCOUNT'
-//					maximum = 300
-//				}
-//
-//				// 커버리지 체크를 제외할 클래스들
-//				excludes = []
-//			}
-//		}
-//	}
-//
-//	task testCoverage(type: Test) {
-//		group 'verification'
-//		description 'Runs the unit tests with coverage'
-//
-//		dependsOn(':test',
-//				':jacocoTestReport',
-//				':jacocoTestCoverageVerification')
-//
-//		tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
-//		tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
-//	}
-//}
-
-
-//subprojects {
-//	apply plugin: 'java'
-//	apply plugin: 'org.springframework.boot'
-//	apply plugin: 'io.spring.dependency-management'
-//	apply plugin: 'org.sonarqube'
-//	apply plugin: 'jacoco'
-//}
-
-
-//plugins {
-//	id 'java'
-//	id 'org.springframework.boot' version '2.7.15'
-//	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-//	id "org.sonarqube" version "4.0.0.2929"
-//	id 'jacoco'
-//}
-//
-//group = 'com'
-//version = '0.0.1-SNAPSHOT'
-//sourceCompatibility = '11'
-
-
-//configurations {
-//	compileOnly {
-//		extendsFrom annotationProcessor
-//	}
-//}
-//
-//repositories {
-//	mavenCentral()
-//}
-//
-//dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	compileOnly 'org.projectlombok:lombok'
-//	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//	runtimeOnly 'com.h2database:h2'
-//	annotationProcessor 'org.projectlombok:lombok'
-//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//}
-
-//test {
-//	useJUnitPlatform()
-//	finalizedBy 'jacocoTestReport'
-//}
-//
-//sonar {
-//	properties {
-//		property("sonar.projectKey", "money")
-//		property("sonar.token", "sqp_c4d8fa2e64d75fd68be4076c7c3cc5a98d16d793")
-//		property("sonar.host.url", "http://localhost:9000")
-//
-//		property "sonar.sources", "src" // 소스 경로
-//		property "sonar.language", "java" // 언어
-//		property "sonar.sourceEncoding", "UTF-8"
-//		property "sonar.profile", "Sonar way" // 소나큐브에서 적용할 프로필(분석할 수준 설정)
-//		property "sonar.java.binaries", "${buildDir}/classes" // 자바 클래스 파일위치
-//		property "sonar.test.inclusions", "**/*Test.java" // 코드 분석에 사용할 테스트 소스
-//		property "sonar.exclusions", "**/resources/static/**, **/Q*.class, **/test/**" // 테스트커버리지에서 제외할 파일, 예제에선 정적 js 파일과 queryDSL Q파일 제외
-//		property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml" // jacoco 플러그인의 결과파일
-//	}
-//}
-//
-//
-//jacoco {
-//	toolVersion = '0.8.7'
-//	// reportsDir = ${project.reporting.baseDir}/jacoco - 따로 설정해 주지 않을 경우 기본 경로
-//}
-//
-//jacocoTestReport {
-//	reports {
-//		html.enabled true // html 만들어 - 로컬에서 쉽게 보기 위함
-//		xml.enabled true // xml 만들어 - 소나큐브 연동 위함
-//		csv.enabled false // csv 안 만들어
-//
-////		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-////		xml.required = true
-////		csv.required = false
-//
-//		// xml.destination file("${buildDir}/jacoco/result.xml") // 여기 저장할 것이라는 뜻.
-//	}
-//	// 코드 커버리지 기준을 만족해야지 build 성공
-////	finalizedBy 'jacocoTestCoverageVerification'
-//}
-////
-//jacocoTestCoverageVerification {
-//	violationRules {
-//		rule {
-//			enabled = true // 이 rule을 적용할 것이다.
-//			element = 'CLASS' // class 단위로
-//
-//			// 브랜치 커버리지 최소 50%
-//			limit {
-//				counter = 'BRANCH'
-//				value = 'COVEREDRATIO'
-//				minimum = 0.50
-//			}
-//
-//			// 라인 커버리지 최소한 80%
-//			limit {
-//				counter = 'LINE'
-//				value = 'COVEREDRATIO'
-//				minimum = 0.80
-//			}
-//
-//			// 빈 줄을 제외한 코드의 라인수 최대 300라인
-//			limit {
-//				counter = 'LINE'
-//				value = 'TOTALCOUNT'
-//				maximum = 300
-//			}
-//
-//			// 커버리지 체크를 제외할 클래스들
-//			excludes = []
-//		}
-//	}
-//}
-//
-//task testCoverage(type: Test) {
-//	group 'verification'
-//	description 'Runs the unit tests with coverage'
-//
-//	dependsOn(':test',
-//			':jacocoTestReport',
-//			':jacocoTestCoverageVerification')
-//
-//	tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
-//	tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
-//}
-
-

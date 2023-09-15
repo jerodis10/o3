@@ -70,7 +70,6 @@ class MemberServiceTest {
 
         // when then
         assertThatThrownBy(() -> memberService.createMember(member)).isInstanceOf(O3Exception.class).hasMessage(O3ExceptionStatus.DUPLICATION_MEMBER.getMessage());
-//        assertThatThrownBy(() -> memberService.createMember(member)).isInstanceOf(O3Exception.class);
     }
 
     @Test
@@ -84,7 +83,6 @@ class MemberServiceTest {
 
         // when then
         assertThatThrownBy(() -> memberService.createMember(member)).isInstanceOf(O3Exception.class).hasMessage(O3ExceptionStatus.INVALID_MEMBER.getMessage());
-//        assertThatThrownBy(() -> memberService.createMember(member)).isInstanceOf(O3Exception.class);
     }
 
     @Test
@@ -95,7 +93,6 @@ class MemberServiceTest {
 
         // when then
         assertThatThrownBy(() -> memberService.searchDetailMember(member.getLoginId())).isInstanceOf(O3Exception.class).hasMessage(O3ExceptionStatus.NO_MEMBER.getMessage());
-//        assertThatThrownBy(() -> memberService.searchDetailMember(member.getLoginId())).isInstanceOf(O3Exception.class);
     }
 
     @Test

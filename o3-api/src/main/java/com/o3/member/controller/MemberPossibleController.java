@@ -1,11 +1,9 @@
 package com.o3.member.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
 import com.o3.member.dto.request.MemberPossibleRequest;
 import com.o3.member.service.MemberPossibleService;
-import com.o3.response.CustomResponse;
-import org.springframework.cache.annotation.CachePut;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

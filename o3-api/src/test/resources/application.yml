@@ -1,0 +1,39 @@
+spring:
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 40000
+        readTimeout: 40000
+  circuitbreaker:
+    enabled: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        waitDurationInOpenState: 50s
+        slowCallRateThreshold: 80
+        slowCallDurationThreshold: 25s
+        registerHealthIndicator: true
+        recordFailurePredicate: com.o3.openfeign.circuit.DefaultExceptionRecordFailurePredicate
+    instances:
+      default:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 30s
+        cancelRunningFuture: true
+
+logging:
+  level:
+    com.o3.openfeign: DEBUG
+    org.springframework.jdbc.core: trace
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace

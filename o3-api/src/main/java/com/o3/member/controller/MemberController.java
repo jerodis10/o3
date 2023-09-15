@@ -4,7 +4,6 @@ import com.o3.member.dto.request.LoginRequest;
 import com.o3.member.dto.request.MemberRequest;
 import com.o3.member.dto.response.MemberResponse;
 import com.o3.member.service.MemberService;
-import com.o3.response.CustomResponse;
 import com.o3.security.jwt.JwtProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-import static com.o3.security.jwt.JwtFilter.AUTHORIZATION_HEADER;
+import static com.o3.member.constants.MemberConstants.AUTHORIZATION_HEADER;
 
 @RestController
 @RequestMapping("/szs")
@@ -39,12 +36,8 @@ public class MemberController {
 
     @Operation(summary = "회원 정보", description = "가입한 회원 정보 조회", tags = { "Member Controller" })
     @GetMapping("/me")
-    public ResponseEntity<MemberResponse> searchDetailMember(
-            @RequestHeader(AUTHORIZATION_HEADER) String jwtToken
-//            HttpServletRequest request
-    ) {
+    public ResponseEntity<MemberResponse> searchDetailMember(@RequestHeader(AUTHORIZATION_HEADER) String jwtToken) {
         return ResponseEntity.ok(memberService.searchDetailMember(jwtProvider.getLoginIdFromToken(jwtToken)));
-//        return ResponseEntity.ok(memberService.searchDetailMember(jwtProvider.getLoginId(request)));
     }
 
 
