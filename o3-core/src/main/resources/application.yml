@@ -24,16 +24,59 @@ spring:
             store_data_at_delete: true   # Delete 될 때, 현재 상태를 함께 저장
             revision_field_name: revision_id
             revision_type_field_name: revision_type
-
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
   profiles:
     include: >
       jwt, 
       scrap
 
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 40000
+        readTimeout: 40000
+  circuitbreaker:
+    enabled: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        waitDurationInOpenState: 50s # HALF_OPEN 상태로 빨리 전환되어 장애가 복구 될 수 있도록 기본값(60s)보다 작게 설정
+        slowCallRateThreshold: 80 # slowCall 발생 시 서버 스레드 점유로 인해 장애가 생길 수 있으므로 기본값(100)보다 조금 작게 설정
+        slowCallDurationThreshold: 25s # 위와 같은 이유로 5초를 slowCall로 판단함. 해당 값은 TimeLimiter의 timeoutDuration보다 작아야 함
+        registerHealthIndicator: true
+        recordFailurePredicate: com.o3.openfeign.circuit.DefaultExceptionRecordFailurePredicate
+    instances:
+      default:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 30s # slowCallDurationThreshold보다는 크게 설정되어야 함
+        cancelRunningFuture: true
+
 logging:
   level:
+    com.o3.openfeign: DEBUG
     org.springframework.jdbc.core: trace
-    org.hibernate.SQL: debug    # Logger
+    org.hibernate.SQL: debug
     org.hibernate.type: trace
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    groups-order: DESC
+    operationsSorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
 

@@ -9,7 +9,7 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath "io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE"
-		classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10"
+//		classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10"
 		classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
 //		classpath "org.asciidoctor:asciidoctor-gradle-jvm:3.3.2"
 	}
@@ -133,55 +133,57 @@ configure(javaProjects) {
 		}
 	}
 
-	task testCoverage(type: Test) {
-		group 'verification'
-		description 'Runs the unit tests with coverage'
-
-		dependsOn(':test',
-				':jacocoTestReport',
-				':jacocoTestCoverageVerification')
-
-		tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
-		tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
-	}
+//	task testCoverage(type: Test) {
+//		group 'verification'
+//		description 'Runs the unit tests with coverage'
+//
+//		dependsOn(':test',
+//				':jacocoTestReport',
+//				':jacocoTestCoverageVerification')
+//
+//		tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
+//		tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
+//	}
 }
 
 
 configure(queryDslProjects) {
-	buildscript {
-		ext {
-			queryDslVersion = "5.0.0"
-		}
-	}
-
-	apply plugin: "com.ewerk.gradle.plugins.querydsl"
+//	buildscript {
+//		ext {
+//			queryDslVersion = "5.0.0"
+//		}
+//	}
+//
+//	apply plugin: "com.ewerk.gradle.plugins.querydsl"
 
 	dependencies {
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-		implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-
-		annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+//		implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+//
+//		annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 	}
 
-	def querydslDir = "$buildDir/generated/querydsl"
-
-	querydsl {
-		jpa = true
-		querydslSourcesDir = querydslDir
-	}
-	sourceSets {
-		main.java.srcDir querydslDir
-	}
-	compileQuerydsl{
-		options.annotationProcessorPath = configurations.querydsl
-	}
-	configurations {
-		compileOnly {
-			extendsFrom annotationProcessor
-		}
-		querydsl.extendsFrom compileClasspath
-	}
+//	def querydslDir = "$buildDir/generated/querydsl"
+//
+//	querydsl {
+//		jpa = true
+//		querydslSourcesDir = querydslDir
+//	}
+//	sourceSets {
+//		main.java.srcDir querydslDir
+//	}
+//	compileQuerydsl{
+//		options.annotationProcessorPath = configurations.querydsl
+//	}
+//	configurations {
+//		compileOnly {
+//			extendsFrom annotationProcessor
+//		}
+//		querydsl.extendsFrom compileClasspath
+//	}
 }
+
+
 
 
 //subprojects {
