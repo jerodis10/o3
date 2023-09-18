@@ -1,6 +1,7 @@
 package com.o3.security.handler;
 
 import com.o3.security.common.ApiResponseType;
+import com.o3.security.config.JwtConfig;
 import com.o3.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -8,20 +9,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.o3.member.constants.MemberConstants.AUTHORIZATION_HEADER;
-import static com.o3.member.constants.MemberConstants.BEARER_HEADER;
 
 @Component
 @RequiredArgsConstructor
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
     private final JwtProvider jwtProvider;
+    private final JwtConfig jwtConfig;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -37,7 +37,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(ApiResponseType.SUCCESS.getCode());
-        response.setHeader(AUTHORIZATION_HEADER, BEARER_HEADER + " " + jwtToken);
+        response.setHeader(AUTHORIZATION_HEADER, jwtConfig.getTokenPrefix() + " " + jwtToken);
     }
 
 }

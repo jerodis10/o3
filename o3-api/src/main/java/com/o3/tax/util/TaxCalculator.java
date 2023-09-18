@@ -3,33 +3,38 @@ package com.o3.tax.util;
 import com.o3.tax.domain.Tax;
 import lombok.experimental.UtilityClass;
 
+import java.math.BigDecimal;
+
 import static com.o3.tax.util.SpecialTaxGroup.*;
 import static com.o3.tax.util.TaxGroup.*;
 
 @UtilityClass
 public class TaxCalculator {
 
-    public long calculateDeterminedTaxAmount(long retirementPensionTaxDeductionAmount, Tax tax) {
-        long taxAmount = tax.getTaxAmount();
+    public BigDecimal calculateDeterminedTaxAmount(BigDecimal retirementPensionTaxDeductionAmount, Tax tax) {
+        BigDecimal taxAmount = tax.getTaxAmount();
 
-        long earnedIncomeTaxCreditAmount = EARNEDINCOME_TAX_CREDIT_AMOUNT.calculateTax(taxAmount, 0L, 0L, 0L, 0L);
+        BigDecimal earnedIncomeTaxCreditAmount = EARNEDINCOME_TAX_CREDIT_AMOUNT.calculateTax(taxAmount, BigDecimal.ZERO);
 
-        long insurancePremiumDeductionAmount = INSURANCE_DEDUCTION_AMOUNT.calculateTax(tax.getInsurance(), 0L);
-        long medicalExpenseDeductibleAmount = MEDICAL_DEDUCTION_AMOUNT.calculateTax(tax.getMedicalExpenses(), tax.getTotalPaymentAmount());
-        long educationalExpenseDeductionAmount = EDUCATIONAL_DEDUCTION_AMOUNT.calculateTax(tax.getEducationExpenses(), 0L);
-        long donationDeductionAmount = DONATION_DEDUCTION_AMOUNT.calculateTax(tax.getDonation(), 0L);
+        BigDecimal insurancePremiumDeductionAmount = INSURANCE_DEDUCTION_AMOUNT.calculateTax(tax.getInsurance(), BigDecimal.ZERO);
+        BigDecimal medicalExpenseDeductibleAmount = MEDICAL_DEDUCTION_AMOUNT.calculateTax(tax.getMedicalExpenses(), tax.getTotalPaymentAmount());
+        BigDecimal educationalExpenseDeductionAmount = EDUCATIONAL_DEDUCTION_AMOUNT.calculateTax(tax.getEducationExpenses(), BigDecimal.ZERO);
+        BigDecimal donationDeductionAmount = DONATION_DEDUCTION_AMOUNT.calculateTax(tax.getDonation(), BigDecimal.ZERO);
 
-        long specialTaxDeductionAmount = SPECIAL_TAX_DEDUCTION_AMOUNT.calculateTax(
-                insurancePremiumDeductionAmount, medicalExpenseDeductibleAmount, educationalExpenseDeductionAmount, donationDeductionAmount, 0L);
+        BigDecimal specialTaxDeductionAmount = SPECIAL_TAX_DEDUCTION_AMOUNT.calculateTax(
+                getSumAmount(insurancePremiumDeductionAmount, medicalExpenseDeductibleAmount, educationalExpenseDeductionAmount, donationDeductionAmount), BigDecimal.ZERO);
 
-        long standardTaxDeductionAmount = STANDARD_TAX_DEDUCTION_AMOUNT.calculateTax(specialTaxDeductionAmount, 0L, 0L, 0L, 0L);
+        BigDecimal standardTaxDeductionAmount = STANDARD_TAX_DEDUCTION_AMOUNT.calculateTax(specialTaxDeductionAmount, BigDecimal.ZERO);
 
-        return DETERMINED_TAX_AMOUNT.calculateTax(
-                taxAmount,
-                retirementPensionTaxDeductionAmount,
-                earnedIncomeTaxCreditAmount,
-                specialTaxDeductionAmount,
-                standardTaxDeductionAmount
-        );
+        return DETERMINED_TAX_AMOUNT.calculateTax(taxAmount,
+                getSumAmount(retirementPensionTaxDeductionAmount, earnedIncomeTaxCreditAmount, specialTaxDeductionAmount, standardTaxDeductionAmount));
+    }
+
+    private BigDecimal getSumAmount(BigDecimal... amountList) {
+        BigDecimal result = BigDecimal.ZERO;
+        for (BigDecimal amount : amountList) {
+            result = result.add(amount);
+        }
+        return result;
     }
 }

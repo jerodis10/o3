@@ -67,7 +67,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
                         .antMatchers("/szs/login", "/szs/signup", "/h2-console").permitAll()
                         .antMatchers("/admin").hasRole("ADMIN")
-                        .antMatchers("/my").authenticated())
+                        .antMatchers("/szs/me").authenticated())
 
                 .formLogin().disable()
                 .build();

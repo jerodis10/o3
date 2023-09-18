@@ -13,7 +13,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,12 +25,12 @@ class TaxScrapResponseTest {
 
     Data data;
     String name, regNo;
-    long taxAmount;
+    BigDecimal taxAmount;
     String donation, educationExpenses, insurance, medicalExpenses, retirementPension, totalPaymentAmount;
 
     @BeforeEach
     void setUp() {
-        taxAmount = 3_000_000L;
+        taxAmount = BigDecimal.valueOf(3_000_000L);
         donation = "150,000";
         educationExpenses = "200,000";
         insurance = "100,000";
@@ -38,12 +40,12 @@ class TaxScrapResponseTest {
 
         Tax tax = Tax.builder()
                 .taxAmount(taxAmount)
-                .donation(150_000L)
-                .educationExpenses(200_000L)
-                .insurance(100_000L)
-                .medicalExpenses(4_400_000L)
-                .retirementPension(6_000_000L)
-                .totalPaymentAmount(60_000_000L)
+                .donation(BigDecimal.valueOf(150_000L))
+                .educationExpenses(BigDecimal.valueOf(200_000L))
+                .insurance(BigDecimal.valueOf(100_000L))
+                .medicalExpenses(BigDecimal.valueOf(4_400_000L))
+                .retirementPension(BigDecimal.valueOf(6_000_000L))
+                .totalPaymentAmount(BigDecimal.valueOf(60_000_000L))
                 .build();
 
         name = "홍길동";
@@ -80,7 +82,7 @@ class TaxScrapResponseTest {
         // given
         Salary salary = new Salary(name, regNo, "60,000,000");
         List<Salary> salaryList = List.of(salary);
-        JsonList jsonList = new JsonList(salaryList, new ArrayList<>(), "100");
+        JsonList jsonList = new JsonList(salaryList, Collections.emptyList(), "100");
         data = new Data(jsonList);
         TaxScrapResponse taxScrapResponse = new TaxScrapResponse("success", data);
 
@@ -92,7 +94,7 @@ class TaxScrapResponseTest {
     @DisplayName("TaxScrapResponse_toEntity_noIncome")
     void throwException_TaxScrapResponse_toEntity_noIncome() {
         // given
-        JsonList jsonList = new JsonList(new ArrayList<>(), new ArrayList<>(), "100");
+        JsonList jsonList = new JsonList(Collections.emptyList(), Collections.emptyList(), "100");
         data = new Data(jsonList);
         TaxScrapResponse taxScrapResponse = new TaxScrapResponse("success", data);
 
@@ -137,12 +139,12 @@ class TaxScrapResponseTest {
 
         //then
         assertThat(tax.getTaxAmount()).isEqualTo(taxAmount);
-        assertThat(tax.getDonation()).isEqualTo(NumberUtil.parseLong(donation));
-        assertThat(tax.getEducationExpenses()).isEqualTo(NumberUtil.parseLong(educationExpenses));
-        assertThat(tax.getInsurance()).isEqualTo(NumberUtil.parseLong(insurance));
-        assertThat(tax.getMedicalExpenses()).isEqualTo(NumberUtil.parseLong(medicalExpenses));
-        assertThat(tax.getRetirementPension()).isEqualTo(NumberUtil.parseLong(retirementPension));
-        assertThat(tax.getTotalPaymentAmount()).isEqualTo(NumberUtil.parseLong(totalPaymentAmount));
+        assertThat(tax.getDonation()).isEqualTo(NumberUtil.parseBigDecimal(donation));
+        assertThat(tax.getEducationExpenses()).isEqualTo(NumberUtil.parseBigDecimal(educationExpenses));
+        assertThat(tax.getInsurance()).isEqualTo(NumberUtil.parseBigDecimal(insurance));
+        assertThat(tax.getMedicalExpenses()).isEqualTo(NumberUtil.parseBigDecimal(medicalExpenses));
+        assertThat(tax.getRetirementPension()).isEqualTo(NumberUtil.parseBigDecimal(retirementPension));
+        assertThat(tax.getTotalPaymentAmount()).isEqualTo(NumberUtil.parseBigDecimal(totalPaymentAmount));
     }
 
 }

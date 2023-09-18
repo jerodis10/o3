@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Builder
 @Getter
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class TaxRefundResponse {
     @JsonProperty("퇴직연금세액공제")
     private final String retirementPensionTaxCredit;
 
-    public static TaxRefundResponse of(String name, long retirementPensionTaxDeductionAmount, long determinedTaxAmount) {
+    public static TaxRefundResponse of(String name, BigDecimal retirementPensionTaxDeductionAmount, BigDecimal determinedTaxAmount) {
         return TaxRefundResponse.builder()
                 .name(name)
                 .retirementPensionTaxCredit(NumberUtil.numberFormatter(retirementPensionTaxDeductionAmount))

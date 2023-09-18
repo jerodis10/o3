@@ -1,6 +1,7 @@
 package com.o3.member.dto.request;
 
 import com.o3.member.domain.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class MemberRequest {
     @NotBlank(message = "주민번호를 입력해주세요")
     @Size(min = 14, max = 14, message = " 주민등록번호는 -을 포함하여 14글자를 입력해주세요.")
     public final String regNo;
+
 
     public Member toEntity() {
         return Member.builder()

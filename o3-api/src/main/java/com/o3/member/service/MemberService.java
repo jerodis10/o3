@@ -10,7 +10,6 @@ import com.o3.member.repository.MemberRepository;
 import com.o3.member.util.MemberValidator;
 import com.o3.security.common.AESUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +36,6 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    @Cacheable(value = "member", key = "#loginId")
     @Transactional(readOnly = true)
     public MemberResponse searchDetailMember(String loginId) {
         return MemberResponse.toDto(memberRepository.findByLoginId(loginId)

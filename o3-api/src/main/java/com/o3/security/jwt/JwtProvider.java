@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.function.Function;
 
 import static com.o3.member.constants.MemberConstants.AUTHORIZATION_HEADER;
-import static com.o3.member.constants.MemberConstants.BEARER_HEADER;
 
 @Slf4j
 @Component
@@ -105,14 +104,14 @@ public class JwtProvider {
      */
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_HEADER)) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtConfig.getTokenPrefix())) {
             return bearerToken.substring(7);
         }
         return null;
     }
 
     public String resolveJwtToken(String bearerToken) {
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_HEADER)) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtConfig.getTokenPrefix())) {
             return bearerToken.substring(7);
         }
         return null;

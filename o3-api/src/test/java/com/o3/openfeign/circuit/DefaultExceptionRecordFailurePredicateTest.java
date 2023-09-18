@@ -19,8 +19,6 @@ class DefaultExceptionRecordFailurePredicateTest {
     @MethodSource("failureException")
     @ParameterizedTest
     void failureException(Throwable throwable) {
-        // given
-
         // when
         boolean result = new DefaultExceptionRecordFailurePredicate().test(throwable);
 
@@ -30,8 +28,6 @@ class DefaultExceptionRecordFailurePredicateTest {
 
     @Test
     void runtimeException() {
-        // given
-
         // when
         boolean result = new DefaultExceptionRecordFailurePredicate().test(new RuntimeException());
 

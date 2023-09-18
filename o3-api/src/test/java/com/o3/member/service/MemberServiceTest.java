@@ -40,8 +40,7 @@ class MemberServiceTest {
     @Mock
     private MemberPossibleRepository memberPossibleRepository;
 
-    @Spy
-//    @Mock
+    @Mock
     private PasswordEncoder passwordEncoder;
 
 

@@ -1,54 +1,34 @@
 package com.o3.tax.util;
 
+import java.math.BigDecimal;
+import java.util.function.BinaryOperator;
+
 public enum TaxGroup {
 
-    DETERMINED_TAX_AMOUNT("결정세액", 0) {
-        public long calculateTax(long taxAmount,
-                                 long retirementPensionTaxDeductionAmount,
-                                 long earnedIncomeTaxCreditAmount,
-                                 long specialTaxDeductionAmount,
-                                 long standardTaxDeductionAmount) {
-            return taxAmount - retirementPensionTaxDeductionAmount - earnedIncomeTaxCreditAmount
-                    - specialTaxDeductionAmount - standardTaxDeductionAmount;
-        }
-    },
+    DETERMINED_TAX_AMOUNT("결정세액", (taxAmount, sumAmount) -> {
+        BigDecimal result = taxAmount.subtract(sumAmount);
+        if(result.compareTo(BigDecimal.ZERO) < 0) return BigDecimal.ZERO;
+        return result;
+    }),
+    EARNEDINCOME_TAX_CREDIT_AMOUNT("근로소득세액공제금액", (amount, amount2) -> amount.multiply(new BigDecimal("0.55"))),
+    SPECIAL_TAX_DEDUCTION_AMOUNT("특별세액공제금액", (amount, amount2) -> amount),
+    RETIREMENT_PENSION_TAX_DEDUCTION_AMOUNT("퇴직연금세액공제금액", (amount, amount2) -> amount.multiply(new BigDecimal("0.15"))),
+    STANDARD_TAX_DEDUCTION_AMOUNT("표준세액공제금액", (amount, amount2) -> {
+        if(amount.compareTo(new BigDecimal("130000")) < 0) return new BigDecimal("130000");
+        return BigDecimal.ZERO;
+    });
 
-    EARNEDINCOME_TAX_CREDIT_AMOUNT("근로소득세액공제금액", 0.55) {
-        public long calculateTax(long taxAmount, long amount2, long amount3, long amount4, long amount5) {
-            return (long) (taxAmount * ratio);
-        }
-    },
+    private final String taxName;
 
-    SPECIAL_TAX_DEDUCTION_AMOUNT("특별세액공제금액", 0) {
-        public long calculateTax(long insuranceDeductionAmount,
-                                 long educationalDeductionAmount,
-                                 long donationDeductionAmount,
-                                 long medicalDeductionAmount,
-                                 long amount5) {
-            return insuranceDeductionAmount + educationalDeductionAmount + donationDeductionAmount + medicalDeductionAmount;
-        }
-    },
+    private final BinaryOperator<BigDecimal> expression;
 
-    RETIREMENT_PENSION_TAX_DEDUCTION_AMOUNT("퇴직연금세액공제금액", 0.15) {
-        public long calculateTax(long retirementAmount, long amount2, long amount3, long amount4, long amount5) {
-            return (long) (retirementAmount * ratio);
-        }
-    },
-
-    STANDARD_TAX_DEDUCTION_AMOUNT("표준세액공제금액", 130_000) {
-        public long calculateTax(long specialTaxDeductionAmount, long amount2, long amount3, long amount4, long amount5) {
-            if(specialTaxDeductionAmount < ratio) return (long) ratio;
-            else return 0L;
-        }
-    };
-
-    public abstract long calculateTax(long amount, long amount2, long amount3, long amount4, long amount5);
-
-    private final String title;
-    protected final double ratio;
-
-    TaxGroup(String title, double ratio) {
-        this.title = title;
-        this.ratio = ratio;
+    TaxGroup(String taxName, BinaryOperator<BigDecimal> expression) {
+        this.taxName = taxName;
+        this.expression = expression;
     }
+
+    public BigDecimal calculateTax(BigDecimal amount, BigDecimal amount2) {
+        return expression.apply(amount, amount2);
+    }
+
 }

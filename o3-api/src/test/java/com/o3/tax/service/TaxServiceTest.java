@@ -24,6 +24,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,7 +88,7 @@ class TaxServiceTest {
         given(memberRepository.findByLoginId(member.getLoginId())).willReturn(Optional.ofNullable(member));
 
         // when then
-        assertThatThrownBy(() -> taxService.refundTax(member.getLoginId())).isInstanceOf(O3Exception.class).hasMessage(O3ExceptionStatus.NO_MEMBER.getMessage());
+        assertThatThrownBy(() -> taxService.refundTax(member.getLoginId())).isInstanceOf(O3Exception.class).hasMessage(O3ExceptionStatus.NO_TAX.getMessage());
     }
     
     @Test
@@ -104,13 +105,13 @@ class TaxServiceTest {
                 .build();
 
         Tax tax = Tax.builder()
-                .taxAmount(3_000_000L)
-                .donation(150_000L)
-                .educationExpenses(200_000L)
-                .insurance(100_000L)
-                .medicalExpenses(4_400_000L)
-                .retirementPension(6_000_000L)
-                .totalPaymentAmount(60_000_000L)
+                .taxAmount(BigDecimal.valueOf(3_000_000L))
+                .donation(BigDecimal.valueOf(150_000L))
+                .educationExpenses(BigDecimal.valueOf(200_000L))
+                .insurance(BigDecimal.valueOf(100_000L))
+                .medicalExpenses(BigDecimal.valueOf(4_400_000L))
+                .retirementPension(BigDecimal.valueOf(6_000_000L))
+                .totalPaymentAmount(BigDecimal.valueOf(60_000_000L))
                 .build();
 
         Salary salary = new Salary("홍길동", "860824 - 1655068", "60,000,000");
@@ -153,24 +154,25 @@ class TaxServiceTest {
                 .build();
 
         Tax tax = Tax.builder()
-                .taxAmount(3_000_000L)
-                .donation(150_000L)
-                .educationExpenses(200_000L)
-                .insurance(100_000L)
-                .medicalExpenses(4_400_000L)
-                .retirementPension(6_000_000L)
-                .totalPaymentAmount(60_000_000L)
+                .taxAmount(BigDecimal.valueOf(3_000_000L))
+                .donation(BigDecimal.valueOf(150_000L))
+                .educationExpenses(BigDecimal.valueOf(200_000L))
+                .insurance(BigDecimal.valueOf(100_000L))
+                .medicalExpenses(BigDecimal.valueOf(4_400_000L))
+//                .retirementPension(BigDecimal.valueOf(123456789L))
+                .retirementPension(BigDecimal.valueOf(6_000_000L))
+                .totalPaymentAmount(BigDecimal.valueOf(60_000_000L))
                 .build();
 
         given(memberRepository.findByLoginId(any())).willReturn(Optional.ofNullable(member));
         given(taxRepository.findByMemberId(any())).willReturn(Optional.ofNullable(tax));
 
-        long retirementPensionTaxDeductionAmount = RETIREMENT_PENSION_TAX_DEDUCTION_AMOUNT.calculateTax(tax.getRetirementPension(), 0L, 0L, 0L, 0L);
-        long determinedTaxAmount = TaxCalculator.calculateDeterminedTaxAmount(retirementPensionTaxDeductionAmount, tax);
+        BigDecimal retirementPensionTaxDeductionAmount = RETIREMENT_PENSION_TAX_DEDUCTION_AMOUNT.calculateTax(tax.getRetirementPension(), BigDecimal.ZERO);
+        BigDecimal determinedTaxAmount = TaxCalculator.calculateDeterminedTaxAmount(retirementPensionTaxDeductionAmount, tax);
 
         // when
         TaxRefundResponse taxRefundResponse = taxService.refundTax(member.getLoginId());
-        
+        System.out.println(taxRefundResponse.getRetirementPensionTaxCredit());
         //then
         assertThat(taxRefundResponse.getRetirementPensionTaxCredit()).isEqualTo(NumberUtil.numberFormatter(retirementPensionTaxDeductionAmount));
         assertThat(taxRefundResponse.getDeterminedTaxAmount()).isEqualTo(NumberUtil.numberFormatter(determinedTaxAmount));

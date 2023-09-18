@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.http.HttpHeaders;
 
 
 @Getter
@@ -19,7 +18,4 @@ public class JwtConfig {
 
     private final Integer tokenExpirationAfterDays;
 
-    public String getAuthorizationHeader() {
-        return HttpHeaders.AUTHORIZATION;
-    }
 }

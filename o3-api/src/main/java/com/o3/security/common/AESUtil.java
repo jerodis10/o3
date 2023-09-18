@@ -14,8 +14,8 @@ import java.util.Base64;
 public class AESUtil {
 
     private String alg = "AES/CBC/PKCS5Padding";
-    private String key = "abcdefghabcdefghabcdefghabcdefgh"; // 32byte
-    private String iv = "0123456789abcdef"; // 16byte
+    private String key = "abcdefghabcdefghabcdefghabcdefgh";
+    private String iv = "0123456789abcdef";
 
     // 암호화
     public String encrypt(String text) {

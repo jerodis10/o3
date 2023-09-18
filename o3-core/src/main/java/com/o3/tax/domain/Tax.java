@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,25 +23,25 @@ public class Tax extends BaseEntity {
     private Long id;
 
     @Audited(withModifiedFlag = true)
-    private long taxAmount;
+    private BigDecimal taxAmount;
 
     @Audited(withModifiedFlag = true)
-    private long retirementPension;
+    private BigDecimal retirementPension;
 
     @Audited(withModifiedFlag = true)
-    private long insurance;
+    private BigDecimal insurance;
 
     @Audited(withModifiedFlag = true)
-    private long medicalExpenses;
+    private BigDecimal medicalExpenses;
 
     @Audited(withModifiedFlag = true)
-    private long educationExpenses;
+    private BigDecimal educationExpenses;
 
     @Audited(withModifiedFlag = true)
-    private long donation;
+    private BigDecimal donation;
 
     @Audited(withModifiedFlag = true)
-    private long totalPaymentAmount;
+    private BigDecimal totalPaymentAmount;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
@@ -51,7 +52,7 @@ public class Tax extends BaseEntity {
     }
 
     @Builder
-    public Tax(long taxAmount, long retirementPension, long insurance, long medicalExpenses, long educationExpenses, long donation, long totalPaymentAmount) {
+    public Tax(BigDecimal taxAmount, BigDecimal retirementPension, BigDecimal insurance, BigDecimal medicalExpenses, BigDecimal educationExpenses, BigDecimal donation, BigDecimal totalPaymentAmount) {
         this.taxAmount = taxAmount;
         this.retirementPension = retirementPension;
         this.insurance = insurance;

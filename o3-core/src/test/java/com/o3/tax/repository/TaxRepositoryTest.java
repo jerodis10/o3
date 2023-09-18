@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,13 +39,13 @@ class TaxRepositoryTest {
                 .build();
 
         Tax tax = Tax.builder()
-                .taxAmount(3_000_000L)
-                .donation(150_000L)
-                .educationExpenses(200_000L)
-                .insurance(100_000L)
-                .medicalExpenses(4_400_000L)
-                .retirementPension(6_000_000L)
-                .totalPaymentAmount(60_000_000L)
+                .taxAmount(BigDecimal.valueOf(3_000_000L))
+                .donation(BigDecimal.valueOf(150_000L))
+                .educationExpenses(BigDecimal.valueOf(200_000L))
+                .insurance(BigDecimal.valueOf(100_000L))
+                .medicalExpenses(BigDecimal.valueOf(4_400_000L))
+                .retirementPension(BigDecimal.valueOf(6_000_000L))
+                .totalPaymentAmount(BigDecimal.valueOf(60_000_000L))
                 .build();
 
         tax.updateMember(member);

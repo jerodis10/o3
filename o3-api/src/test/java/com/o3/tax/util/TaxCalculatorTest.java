@@ -4,6 +4,8 @@ import com.o3.tax.domain.Tax;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TaxCalculatorTest {
@@ -12,35 +14,36 @@ class TaxCalculatorTest {
     @DisplayName("결정세액 계산")
     void success_whenCalculateTax() {
         // given
-        long retirementPension = 6_000_000L;
+        BigDecimal retirementPension = BigDecimal.valueOf(6_000_000L);
         Tax tax = Tax.builder()
-                .taxAmount(3_000_000L)
-                .donation(150_000L)
-                .educationExpenses(200_000L)
-                .insurance(100_000L)
-                .medicalExpenses(4_400_000L)
+                .taxAmount(BigDecimal.valueOf(3_000_000L))
+                .donation(BigDecimal.valueOf(150_000L))
+                .educationExpenses(BigDecimal.valueOf(200_000L))
+                .insurance(BigDecimal.valueOf(100_000L))
+                .medicalExpenses(BigDecimal.valueOf(4_400_000L))
                 .retirementPension(retirementPension)
-                .totalPaymentAmount(60_000_000L)
+                .totalPaymentAmount(BigDecimal.valueOf(60_000_000L))
                 .build();
 
-        long taxAmount = tax.getTaxAmount();
-        long earnedIncomeTaxCreditAmount = (long) (taxAmount * 0.55);
-        long insurancePremiumDeductionAmount = (long) (tax.getInsurance() * 0.12);
+        BigDecimal taxAmount = tax.getTaxAmount();
+        BigDecimal earnedIncomeTaxCreditAmount = taxAmount.multiply(BigDecimal.valueOf(0.55));
+        BigDecimal insurancePremiumDeductionAmount = tax.getInsurance().multiply(BigDecimal.valueOf(0.12));
 
-        long medicalExpenseDeductibleAmount = (long) ((tax.getMedicalExpenses() - tax.getTotalPaymentAmount() * 0.03) * 0.15);
-        if(medicalExpenseDeductibleAmount < 0) medicalExpenseDeductibleAmount = 0L;
+        BigDecimal medicalExpenseDeductibleAmount = tax.getMedicalExpenses().subtract(tax.getTotalPaymentAmount().multiply(BigDecimal.valueOf(0.03))).multiply(BigDecimal.valueOf(0.15));
+        if(medicalExpenseDeductibleAmount.compareTo(BigDecimal.ZERO) < 0) medicalExpenseDeductibleAmount = BigDecimal.ZERO;
 
-        long educationalExpenseDeductionAmount = (long) (tax.getEducationExpenses() * 0.15);
-        long donationDeductionAmount = (long) (tax.getDonation() * 0.15);
-        long specialTaxDeductionAmount = insurancePremiumDeductionAmount + medicalExpenseDeductibleAmount + educationalExpenseDeductionAmount + donationDeductionAmount;
+        BigDecimal educationalExpenseDeductionAmount = tax.getEducationExpenses().multiply(BigDecimal.valueOf(0.15));
+        BigDecimal donationDeductionAmount = tax.getDonation().multiply(BigDecimal.valueOf(0.15));
+        BigDecimal specialTaxDeductionAmount = insurancePremiumDeductionAmount.add(medicalExpenseDeductibleAmount).add(educationalExpenseDeductionAmount).add(donationDeductionAmount);
 
-        long standardTaxDeductionAmount = 0L;
-        if(specialTaxDeductionAmount < 130_000L) standardTaxDeductionAmount = 130_000L;
-        else standardTaxDeductionAmount = 0L;
+        BigDecimal standardTaxDeductionAmount = BigDecimal.ZERO;
+        if(specialTaxDeductionAmount.compareTo(BigDecimal.valueOf(130_000L)) < 0) standardTaxDeductionAmount = BigDecimal.valueOf(130_000L);
 
-        long retirementPensionTaxDeductionAmount =(long)(retirementPension * 0.15);
+        BigDecimal retirementPensionTaxDeductionAmount = retirementPension.multiply(BigDecimal.valueOf(0.15));
+        BigDecimal sumAmount = retirementPensionTaxDeductionAmount.add(earnedIncomeTaxCreditAmount).add(specialTaxDeductionAmount).add(standardTaxDeductionAmount);
 
-        long determinedTaxAmount = taxAmount - retirementPensionTaxDeductionAmount - earnedIncomeTaxCreditAmount - specialTaxDeductionAmount - standardTaxDeductionAmount;
+        BigDecimal determinedTaxAmount = taxAmount.subtract(sumAmount);
+        if(determinedTaxAmount.compareTo(BigDecimal.ZERO) < 0) determinedTaxAmount = BigDecimal.ZERO;
 
         // when then
         assertThat(TaxCalculator.calculateDeterminedTaxAmount(retirementPensionTaxDeductionAmount, tax)).isEqualTo(determinedTaxAmount);

@@ -16,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.o3.tax.util.PaymentGroup.*;
@@ -51,7 +53,7 @@ public class TaxScrapResponse {
         String medicalExpenses = "";
         String educationExpenses = "";
         String donation = "";
-        long totalPaymentAmount = 0L;
+        BigDecimal totalPaymentAmount = BigDecimal.ZERO;
 
         if (ObjectUtils.isEmpty(jsonList)) throw new O3Exception(O3ExceptionStatus.NO_JSON_EXTERNAL_API);
 
@@ -81,12 +83,12 @@ public class TaxScrapResponse {
         }
 
         return Tax.builder()
-                .taxAmount(NumberUtil.parseLong(taxAmount))
-                .donation(NumberUtil.parseLong(donation))
-                .medicalExpenses(NumberUtil.parseLong(medicalExpenses))
-                .educationExpenses(NumberUtil.parseLong(educationExpenses))
-                .insurance(NumberUtil.parseLong(insurance))
-                .retirementPension(NumberUtil.parseLong(retirementPension))
+                .taxAmount(NumberUtil.parseBigDecimal(taxAmount))
+                .donation(NumberUtil.parseBigDecimal(donation))
+                .medicalExpenses(NumberUtil.parseBigDecimal(medicalExpenses))
+                .educationExpenses(NumberUtil.parseBigDecimal(educationExpenses))
+                .insurance(NumberUtil.parseBigDecimal(insurance))
+                .retirementPension(NumberUtil.parseBigDecimal(retirementPension))
                 .totalPaymentAmount(totalPaymentAmount)
                 .build();
     }
@@ -95,15 +97,15 @@ public class TaxScrapResponse {
         if (!ObjectUtils.isEmpty(jsonList) && !jsonList.getSalaryList().isEmpty()) {
             return jsonList.getSalaryList();
         }
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
-    private long sumTotalPaymentAmount(List<Salary> salaryList) {
-        long totalPaymentAmount = 0L;
+    private BigDecimal sumTotalPaymentAmount(List<Salary> salaryList) {
+        BigDecimal totalPaymentAmount = BigDecimal.ZERO;
         for (Salary salary : salaryList) {
             String s = salary.getTotalPaymentAmount().replace(",", "");
             if (StringUtils.hasText(s)) {
-                totalPaymentAmount += Long.parseLong(s);
+                totalPaymentAmount = totalPaymentAmount.add(new BigDecimal(s));
             }
         }
         return totalPaymentAmount;
